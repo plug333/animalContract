@@ -1,18 +1,19 @@
 import { Contract, Transaction, Returns, Context } from "fabric-contract-api";
+import { Iterators } from "fabric-shim";
 import stringify from 'json-stringify-deterministic';
 import sortKeysRecursive from 'sort-keys-recursive';
-import { Animal } from "./animal";
 
 export class AnimalContract extends Contract {
     @Transaction()
-    public async CreateAnimal(ctx: Context, __id: string, _name: string, _breed: string, _birthDate: Date, _imgUrl: string, _description: string, _pedigree: boolean): Promise<void> {
+    public async CreateAnimal(ctx: Context, __id: string, _name: string, _breed: string, _birthDate: string, _imgUrl: string, _description: string, _pedigree: string): Promise<void> {
+        console.log(__id);
         const exists = await this.AnimalExists(ctx, __id);
         if (exists) {
             throw new Error(`The animal ${__id} already exists`);
         }
 
         const animal = {
-            _id: __id,
+            id: __id,
             name: _name,
             breed: _breed,
             birthDate: _birthDate,
@@ -25,6 +26,7 @@ export class AnimalContract extends Contract {
     }
 
     @Transaction(false)
+    @Returns('string')
     public async ReadAnimal(ctx: Context, __id: string): Promise<string> {
         const animalJSON = await ctx.stub.getState(__id); // get the asset from chaincode state
         if (!animalJSON || animalJSON.length === 0) {
@@ -107,5 +109,44 @@ export class AnimalContract extends Contract {
     }
 
     @Transaction()
-    public async GetAnimalHistory() {}
+    @Returns('string')
+    public async GetAnimalHistory(ctx: Context, animalName: string): Promise<string> {
+        let resultsIterator = await ctx.stub.getHistoryForKey(animalName);
+        let results = await this._GetAllResults(resultsIterator, true);
+
+        return JSON.stringify(results);
+    }
+
+    async _GetAllResults(iterator, isHistory: boolean): Promise<string[]> {
+		let allResults: string[] = [];
+		let res = await iterator.next();
+		while (!res.done) {
+			if (res.value && res.value.value.toString()) {
+				let jsonRes: any = {};
+				console.log(res.value.value.toString());
+				if (isHistory && isHistory === true) {
+					jsonRes.TxId = res.value.txId;
+					jsonRes.Timestamp = res.value.timestamp;
+					try {
+						jsonRes.Value = JSON.parse(res.value.value.toString());
+					} catch (err) {
+						console.log(err);
+						jsonRes.Value = res.value.value.toString();
+					}
+				} else {
+					jsonRes.Key = res.value.key;
+					try {
+						jsonRes.Record = JSON.parse(res.value.value.toString());
+					} catch (err) {
+						console.log(err);
+						jsonRes.Record = res.value.value.toString();
+					}
+				}
+				allResults.push(jsonRes);
+			}
+			res = await iterator.next();
+		}
+		iterator.close();
+		return allResults;
+	}
 }
