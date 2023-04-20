@@ -97,8 +97,8 @@ class AnimalContract extends fabric_contract_api_1.Contract {
         }
         return JSON.stringify(allResults);
     }
-    async GetAnimalHistory(ctx, animalName) {
-        let resultsIterator = await ctx.stub.getHistoryForKey(animalName);
+    async GetAnimalHistory(ctx, __id) {
+        let resultsIterator = await ctx.stub.getHistoryForKey(__id);
         let results = await this._GetAllResults(resultsIterator, true);
         return JSON.stringify(results);
     }

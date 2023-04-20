@@ -7,6 +7,6 @@ export declare class AnimalContract extends Contract {
     UpdateAnimal(ctx: Context, __id: string, _name: string, _breed: string, _birthDate: Date, _imgUrl: string, _description: string, _pedigree: boolean): Promise<void>;
     DeleteAnimal(ctx: Context, __id: string): Promise<void>;
     GetAllAnimal(ctx: Context): Promise<string>;
-    GetAnimalHistory(ctx: Context, animalName: string): Promise<string>;
+    GetAnimalHistory(ctx: Context, __id: string): Promise<string>;
     _GetAllResults(iterator: any, isHistory: boolean): Promise<string[]>;
 }
