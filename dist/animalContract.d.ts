@@ -1,6 +1,6 @@
 import { Contract, Context } from "fabric-contract-api";
 export declare class AnimalContract extends Contract {
-    CreateAnimal(ctx: Context, __id: string, _name: string, _breed: string, _birthDate: string, _imgUrl: string, _description: string, _pedigree: string): Promise<void>;
+    CreateAnimal(ctx: Context, _animal: string): Promise<void>;
     ReadAnimal(ctx: Context, __id: string): Promise<string>;
     UpdateAnimalName(ctx: Context, __id: string, _name: string): Promise<void>;
     AnimalExists(ctx: Context, __id: string): Promise<boolean>;
@@ -9,4 +9,5 @@ export declare class AnimalContract extends Contract {
     GetAllAnimal(ctx: Context): Promise<string>;
     GetAnimalHistory(ctx: Context, __id: string): Promise<string>;
     _GetAllResults(iterator: any, isHistory: boolean): Promise<string[]>;
+    AnimalSearch(ctx: Context, __id: string): Promise<string>;
 }

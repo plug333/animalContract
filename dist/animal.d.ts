@@ -1,9 +1,15 @@
 export declare class Animal {
-    _id: string;
+    ID: string;
     name: string;
+    type: string;
     breed: string;
-    birthDate: Date;
+    birthDate: string;
     imgUrl: string;
     description: string;
-    pedigree: boolean;
+    pedigree: string;
+    owner: {
+        ID: string;
+        name: string;
+        surname: string;
+    };
 }

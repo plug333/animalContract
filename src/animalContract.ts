@@ -1,12 +1,35 @@
 import { Contract, Transaction, Returns, Context } from "fabric-contract-api";
-import { Iterators } from "fabric-shim";
 import stringify from 'json-stringify-deterministic';
 import sortKeysRecursive from 'sort-keys-recursive';
+import {Animal} from "./animal";
 
 export class AnimalContract extends Contract {
     @Transaction()
+    public async CreateAnimal(ctx: Context, _animal: string): Promise<void> {
+        console.log("**********************" +  _animal);
+        console.log("********************** exists *" +  JSON.parse(_animal));
+        const animal =  JSON.parse(_animal);
+        const exists = await this.AnimalExists(ctx, animal.ID);
+        console.log("********************** exists * id " animal.ID + " ? "+  exists);
+        if (exists) {
+            throw new Error(`The animal ${animal.ID} already exists`);
+        }
+
+/*        const animal = {
+            id: _animal.ID,
+            name: _animal.name,
+            breed: _animal.breed,
+            birthDate: _animal.ID,
+            imgUrl: _animal.imgUrl,
+            description: _animal.description,
+            pedigree: _animal.pedigree
+        };*/
+
+        await ctx.stub.putState(animal.ID, Buffer.from(stringify(sortKeysRecursive(animal))));
+    }
+
+/*    @Transaction()
     public async CreateAnimal(ctx: Context, __id: string, _name: string, _breed: string, _birthDate: string, _imgUrl: string, _description: string, _pedigree: string): Promise<void> {
-        console.log(__id);
         const exists = await this.AnimalExists(ctx, __id);
         if (exists) {
             throw new Error(`The animal ${__id} already exists`);
@@ -23,7 +46,7 @@ export class AnimalContract extends Contract {
         };
 
         await ctx.stub.putState(__id, Buffer.from(stringify(sortKeysRecursive(animal))));
-    }
+    }*/
 
     @Transaction(false)
     @Returns('string')
@@ -32,7 +55,7 @@ export class AnimalContract extends Contract {
         if (!animalJSON || animalJSON.length === 0) {
             throw new Error(`The animal ${__id} does not exist`);
         }
-        
+
         return animalJSON.toString();
     }
 
@@ -149,4 +172,17 @@ export class AnimalContract extends Contract {
 		iterator.close();
 		return allResults;
 	}
+
+    @Transaction(false)
+    @Returns('string')
+    public async AnimalSearch(ctx: Context, __id: string): Promise<string> {
+        console.log("************ ### " + __id);
+        const animalJSON = await ctx.stub.getState(__id); // get the asset from chaincode state
+        const xxx = await ctx.GetStube();
+        if (!animalJSON || animalJSON.length === 0) {
+            throw new Error(`The animal ${__id} does not exist`);
+        }
+
+        return animalJSON.toString();
+    }
 }

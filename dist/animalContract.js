@@ -17,23 +17,45 @@ const fabric_contract_api_1 = require("fabric-contract-api");
 const json_stringify_deterministic_1 = __importDefault(require("json-stringify-deterministic"));
 const sort_keys_recursive_1 = __importDefault(require("sort-keys-recursive"));
 class AnimalContract extends fabric_contract_api_1.Contract {
-    async CreateAnimal(ctx, __id, _name, _breed, _birthDate, _imgUrl, _description, _pedigree) {
-        console.log(__id);
-        const exists = await this.AnimalExists(ctx, __id);
+    async CreateAnimal(ctx, _animal) {
+        console.log("**********************" + _animal);
+        console.log("********************** exists *" + JSON.parse(_animal));
+        const animal = JSON.parse(_animal);
+        const exists = await this.AnimalExists(ctx, animal.ID);
+        console.log("********************** exists * id ", animal.ID + " ? " + exists);
         if (exists) {
-            throw new Error(`The animal ${__id} already exists`);
+            throw new Error(`The animal ${animal.ID} already exists`);
         }
-        const animal = {
-            id: __id,
-            name: _name,
-            breed: _breed,
-            birthDate: _birthDate,
-            imgUrl: _imgUrl,
-            description: _description,
-            pedigree: _pedigree
-        };
-        await ctx.stub.putState(__id, Buffer.from(json_stringify_deterministic_1.default(sort_keys_recursive_1.default(animal))));
+        /*        const animal = {
+                    id: _animal.ID,
+                    name: _animal.name,
+                    breed: _animal.breed,
+                    birthDate: _animal.ID,
+                    imgUrl: _animal.imgUrl,
+                    description: _animal.description,
+                    pedigree: _animal.pedigree
+                };*/
+        await ctx.stub.putState(animal.ID, Buffer.from(json_stringify_deterministic_1.default(sort_keys_recursive_1.default(animal))));
     }
+    /*    @Transaction()
+        public async CreateAnimal(ctx: Context, __id: string, _name: string, _breed: string, _birthDate: string, _imgUrl: string, _description: string, _pedigree: string): Promise<void> {
+            const exists = await this.AnimalExists(ctx, __id);
+            if (exists) {
+                throw new Error(`The animal ${__id} already exists`);
+            }
+    
+            const animal = {
+                id: __id,
+                name: _name,
+                breed: _breed,
+                birthDate: _birthDate,
+                imgUrl: _imgUrl,
+                description: _description,
+                pedigree: _pedigree
+            };
+    
+            await ctx.stub.putState(__id, Buffer.from(stringify(sortKeysRecursive(animal))));
+        }*/
     async ReadAnimal(ctx, __id) {
         const animalJSON = await ctx.stub.getState(__id); // get the asset from chaincode state
         if (!animalJSON || animalJSON.length === 0) {
@@ -137,11 +159,19 @@ class AnimalContract extends fabric_contract_api_1.Contract {
         iterator.close();
         return allResults;
     }
+    async AnimalSearch(ctx, __id) {
+        console.log("************ ### " + __id);
+        const animalJSON = await ctx.stub.getState(__id); // get the asset from chaincode state
+        if (!animalJSON || animalJSON.length === 0) {
+            throw new Error(`The animal ${__id} does not exist`);
+        }
+        return animalJSON.toString();
+    }
 }
 __decorate([
     fabric_contract_api_1.Transaction(),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [fabric_contract_api_1.Context, String, String, String, String, String, String, String]),
+    __metadata("design:paramtypes", [fabric_contract_api_1.Context, String]),
     __metadata("design:returntype", Promise)
 ], AnimalContract.prototype, "CreateAnimal", null);
 __decorate([
@@ -190,5 +220,12 @@ __decorate([
     __metadata("design:paramtypes", [fabric_contract_api_1.Context, String]),
     __metadata("design:returntype", Promise)
 ], AnimalContract.prototype, "GetAnimalHistory", null);
+__decorate([
+    fabric_contract_api_1.Transaction(false),
+    fabric_contract_api_1.Returns('string'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [fabric_contract_api_1.Context, String]),
+    __metadata("design:returntype", Promise)
+], AnimalContract.prototype, "AnimalSearch", null);
 exports.AnimalContract = AnimalContract;
 //# sourceMappingURL=animalContract.js.map
