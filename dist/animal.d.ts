@@ -7,9 +7,7 @@ export declare class Animal {
     imgUrl: string;
     description: string;
     pedigree: string;
-    owner: {
-        ID: string;
-        name: string;
-        surname: string;
-    };
+    ownerId: string;
+    ownerName: string;
+    ownerLastname: string;
 }

@@ -159,13 +159,16 @@ class AnimalContract extends fabric_contract_api_1.Contract {
         iterator.close();
         return allResults;
     }
-    async AnimalSearch(ctx, __id) {
-        console.log("************ ### " + __id);
-        const animalJSON = await ctx.stub.getState(__id); // get the asset from chaincode state
-        if (!animalJSON || animalJSON.length === 0) {
-            throw new Error(`The animal ${__id} does not exist`);
-        }
-        return animalJSON.toString();
+    async AnimalSearch(ctx, query) {
+        console.log("************ ### 2 " + query);
+        let animalJSON = await ctx.stub.getQueryResult(query); // get the asset from chaincode state
+        //const xxx = await ctx.GetStube();
+        // if (!animalJSON || animalJSON.next()) {
+        //     throw new Error(`The animal ${query} does not exist`);
+        // }
+        console.log("************ ### 2 " + animalJSON);
+        let results = await this._GetAllResults(animalJSON, false);
+        return JSON.stringify(results);
     }
 }
 __decorate([

@@ -175,14 +175,16 @@ export class AnimalContract extends Contract {
 
     @Transaction(false)
     @Returns('string')
-    public async AnimalSearch(ctx: Context, __id: string): Promise<string> {
-        console.log("************ ### " + __id);
-        const animalJSON = await ctx.stub.getState(__id); // get the asset from chaincode state
-        const xxx = await ctx.GetStube();
-        if (!animalJSON || animalJSON.length === 0) {
-            throw new Error(`The animal ${__id} does not exist`);
-        }
+    public async AnimalSearch(ctx: Context, query: string): Promise<string> {
+        console.log("************ ### 2 " + query);
+        let animalJSON = await ctx.stub.getQueryResult(query); // get the asset from chaincode state
+        //const xxx = await ctx.GetStube();
+        // if (!animalJSON || animalJSON.next()) {
+        //     throw new Error(`The animal ${query} does not exist`);
+        // }
+        console.log("************ ### 2 " + animalJSON);
+        let results = await this._GetAllResults(animalJSON, false);
 
-        return animalJSON.toString();
+        return JSON.stringify(results);
     }
 }
