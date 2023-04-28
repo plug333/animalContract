@@ -5,6 +5,7 @@ import sortKeysRecursive from 'sort-keys-recursive';
 
 export class AnimalContract extends Contract {
     @Transaction()
+<<<<<<< Updated upstream
     public async CreateAnimal(ctx: Context, __id: string, _name: string, _breed: string, _birthDate: string, _imgUrl: string, _description: string, _pedigree: string): Promise<void> {
         console.log(__id);
         const exists = await this.AnimalExists(ctx, __id);
@@ -23,12 +24,22 @@ export class AnimalContract extends Contract {
         };
 
         await ctx.stub.putState(__id, Buffer.from(stringify(sortKeysRecursive(animal))));
+=======
+    public async CreateAnimal(ctx: Context, _animal: string): Promise<void> {
+        const animal =  JSON.parse(_animal);
+        const exists = await this.AnimalExists(ctx, animal.ID);
+        if (exists) {
+            throw new Error(`The animal ${animal.ID} already exists`);
+        }
+
+        await ctx.stub.putState(animal.ID, Buffer.from(stringify(sortKeysRecursive(animal))));
+>>>>>>> Stashed changes
     }
 
     @Transaction(false)
     @Returns('string')
     public async ReadAnimal(ctx: Context, __id: string): Promise<string> {
-        const animalJSON = await ctx.stub.getState(__id); // get the asset from chaincode state
+        const animalJSON = await ctx.stub.getState(__id);
         if (!animalJSON || animalJSON.length === 0) {
             throw new Error(`The animal ${__id} does not exist`);
         }
@@ -149,4 +160,30 @@ export class AnimalContract extends Contract {
 		iterator.close();
 		return allResults;
 	}
+<<<<<<< Updated upstream
+=======
+
+    @Transaction(false)
+    @Returns('string')
+    public async AnimalSearch(ctx: Context, query: string): Promise<string> {
+        let animalJSON = await ctx.stub.getQueryResult(query);
+        let results = await this._GetAllResults(animalJSON, false);
+
+        return JSON.stringify(results);
+    }
+
+    @Transaction()
+    public async UpdateAnimalOwner(ctx: Context, __id: string, _newOwnerId: string): Promise<void> {
+        const exists = await this.AnimalExists(ctx, __id);
+        if (!exists) {
+            throw new Error(`The animal ${__id} does not exist`);
+        }
+
+        const updatedAnimalOwner = {
+            ownerId: _newOwnerId
+        }
+
+        return ctx.stub.putState(__id, Buffer.from(stringify(sortKeysRecursive(updatedAnimalOwner))));
+    }
+>>>>>>> Stashed changes
 }
