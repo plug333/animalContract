@@ -196,8 +196,8 @@ export class AnimalContract extends Contract {
         }
 
         const updatedAnimalOwner = {
-            ownerId: _ownerId
-        }
+            ownerId: _ownerId,
+        };
 
         return ctx.stub.putState(__id, Buffer.from(stringify(sortKeysRecursive(updatedAnimalOwner))));
     }
