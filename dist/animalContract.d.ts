@@ -10,4 +10,5 @@ export declare class AnimalContract extends Contract {
     GetAnimalHistory(ctx: Context, __id: string): Promise<string>;
     _GetAllResults(iterator: any, isHistory: boolean): Promise<string[]>;
     AnimalSearch(ctx: Context, query: string): Promise<string>;
+    UpdateAnimalOwner(ctx: Context, __id: string, _ownerId: string): Promise<void>;
 }

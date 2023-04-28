@@ -187,4 +187,18 @@ export class AnimalContract extends Contract {
 
         return JSON.stringify(results);
     }
+
+    @Transaction()
+    public async UpdateAnimalOwner(ctx: Context, __id: string, _ownerId: string): Promise<void> {
+        const exists = await this.AnimalExists(ctx, __id);
+        if (!exists) {
+            throw new Error(`The animal ${__id} does not exist`);
+        }
+
+        const updatedAnimalOwner = {
+            ownerId: _ownerId
+        }
+
+        return ctx.stub.putState(__id, Buffer.from(stringify(sortKeysRecursive(updatedAnimalOwner))));
+    }
 }

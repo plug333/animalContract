@@ -99,4 +99,20 @@ export class AnimalContractService implements AnimalContractServiceInterface {
         return JSON.stringify(JSON.parse(inputString), null, 2);
     }
 
+    async updateAnimalOwner(id: string, ownerId: string): Promise<string> {
+        const gateway = await this.blockchainService.connect();
+        const network = gateway.getNetwork(config.fabric.channel.name);
+        const contract = network.getContract(config.fabric.chaincode.name);
+        try {
+            const commit = await contract.submitAsync('UpdateAnimalOwner',
+                {arguments: [id, ownerId]});
+            const resultJson = this.utf8Decoder.decode(commit.getResult());
+
+            return commit.getTransactionId();
+        } catch (error) {
+            console.log("Error during the animal owner update with message: ", error);
+            throw error;
+        }
+    }
+
 }

@@ -170,6 +170,16 @@ class AnimalContract extends fabric_contract_api_1.Contract {
         let results = await this._GetAllResults(animalJSON, false);
         return JSON.stringify(results);
     }
+    async UpdateAnimalOwner(ctx, __id, _ownerId) {
+        const exists = await this.AnimalExists(ctx, __id);
+        if (!exists) {
+            throw new Error(`The animal ${__id} does not exist`);
+        }
+        const updatedAnimalOwner = {
+            ownerId: _ownerId
+        };
+        return ctx.stub.putState(__id, Buffer.from(json_stringify_deterministic_1.default(sort_keys_recursive_1.default(updatedAnimalOwner))));
+    }
 }
 __decorate([
     fabric_contract_api_1.Transaction(),
@@ -230,5 +240,11 @@ __decorate([
     __metadata("design:paramtypes", [fabric_contract_api_1.Context, String]),
     __metadata("design:returntype", Promise)
 ], AnimalContract.prototype, "AnimalSearch", null);
+__decorate([
+    fabric_contract_api_1.Transaction(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [fabric_contract_api_1.Context, String, String]),
+    __metadata("design:returntype", Promise)
+], AnimalContract.prototype, "UpdateAnimalOwner", null);
 exports.AnimalContract = AnimalContract;
 //# sourceMappingURL=animalContract.js.map

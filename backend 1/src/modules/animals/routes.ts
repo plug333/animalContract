@@ -73,5 +73,15 @@ export default function animalHandler(server, options, next) {
 		}
 	);
 
+	server.put('/:_id/ownerId', async (req, res) => {
+		req.log.info('Update animal owner to db');
+		const _id = req.params._id;
+		const animal = await server.db.animals.findOne(req.params._id);
+		animal.transactionHash = await getAnimalContractService().updateAnimalOwner(animal._id, req.body.ownerId );
+		animal.name = req.body.name;
+		const animals = await server.db.animals.save({ _id, ...animal });
+		res.status(200).send(animals);
+	});
+
 	next();
 }

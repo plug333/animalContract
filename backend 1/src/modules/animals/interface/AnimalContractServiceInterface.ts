@@ -7,5 +7,6 @@ export interface AnimalContractServiceInterface {
     animalHistory(id: string): Promise<string>;
     searchAnimalByName(animalName: string): Promise<AnimalBlockchain>;
     searchAnimalByOwner(animalOwner: string): Promise<AnimalBlockchain>;
+    updateAnimalOwner(id: string, animalOwner: string): Promise<string>;
 }
 
