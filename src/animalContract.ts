@@ -5,7 +5,7 @@ import sortKeysRecursive from 'sort-keys-recursive';
 export class AnimalContract extends Contract {
     @Transaction()
     public async CreateAnimal(ctx: Context, _animal: string): Promise<void> {
-        const animal =  JSON.parse(_animal);
+        const animal = JSON.parse(_animal);
         const exists = await this.AnimalExists(ctx, animal.ID);
         if (exists) {
             throw new Error(`The animal ${animal.ID} already exists`);
@@ -26,17 +26,18 @@ export class AnimalContract extends Contract {
     }
 
     @Transaction()
-    public async UpdateAnimalName(ctx: Context, __id: string, _name: string): Promise<void> {
+    public async UpdateAnimalName(ctx: Context, __id: string, _newName: string): Promise<void> {
         const exists = await this.AnimalExists(ctx, __id);
         if (!exists) {
             throw new Error(`The animal ${__id} does not exist`);
         }
 
-        const updatedAnimalName = {
-            name: _name
-        }
+        const animal = await ctx.stub.getState(__id);
+        const newAnimal = JSON.parse(animal.toString());
 
-        return ctx.stub.putState(__id, Buffer.from(stringify(sortKeysRecursive(updatedAnimalName))));
+        newAnimal.name = _newName;
+
+        await ctx.stub.putState(__id, Buffer.from(JSON.stringify(newAnimal)));
     }
 
     @Transaction(false)
@@ -47,23 +48,14 @@ export class AnimalContract extends Contract {
     }
 
     @Transaction()
-    public async UpdateAnimal(ctx: Context, __id: string, _name: string, _breed: string, _birthDate: Date, _imgUrl: string, _description: string, _pedigree: boolean): Promise<void> {
+    public async UpdateAnimal(ctx: Context, __id: string, _animal: string): Promise<void> {
+        const animal = JSON.parse(_animal);
         const exists = await this.AnimalExists(ctx, __id);
         if (!exists) {
             throw new Error(`The animal ${__id} does not exist`);
         }
 
-        const updatedAnimal = {
-            _id: __id,
-            name: _name,
-            breed: _breed,
-            birthDate: _birthDate,
-            imgUrl: _imgUrl,
-            description: _description,
-            pedigree: _pedigree
-        };
-
-        return ctx.stub.putState(__id, Buffer.from(stringify(sortKeysRecursive(updatedAnimal))));
+        await ctx.stub.putState(animal.ID, Buffer.from(stringify(sortKeysRecursive(animal))));
     }
 
     @Transaction()
