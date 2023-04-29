@@ -1,30 +1,9 @@
 import { Contract, Transaction, Returns, Context } from "fabric-contract-api";
-import { Iterators } from "fabric-shim";
 import stringify from 'json-stringify-deterministic';
 import sortKeysRecursive from 'sort-keys-recursive';
 
 export class AnimalContract extends Contract {
     @Transaction()
-<<<<<<< Updated upstream
-    public async CreateAnimal(ctx: Context, __id: string, _name: string, _breed: string, _birthDate: string, _imgUrl: string, _description: string, _pedigree: string): Promise<void> {
-        console.log(__id);
-        const exists = await this.AnimalExists(ctx, __id);
-        if (exists) {
-            throw new Error(`The animal ${__id} already exists`);
-        }
-
-        const animal = {
-            id: __id,
-            name: _name,
-            breed: _breed,
-            birthDate: _birthDate,
-            imgUrl: _imgUrl,
-            description: _description,
-            pedigree: _pedigree
-        };
-
-        await ctx.stub.putState(__id, Buffer.from(stringify(sortKeysRecursive(animal))));
-=======
     public async CreateAnimal(ctx: Context, _animal: string): Promise<void> {
         const animal =  JSON.parse(_animal);
         const exists = await this.AnimalExists(ctx, animal.ID);
@@ -33,7 +12,6 @@ export class AnimalContract extends Contract {
         }
 
         await ctx.stub.putState(animal.ID, Buffer.from(stringify(sortKeysRecursive(animal))));
->>>>>>> Stashed changes
     }
 
     @Transaction(false)
@@ -160,8 +138,6 @@ export class AnimalContract extends Contract {
 		iterator.close();
 		return allResults;
 	}
-<<<<<<< Updated upstream
-=======
 
     @Transaction(false)
     @Returns('string')
@@ -185,5 +161,4 @@ export class AnimalContract extends Contract {
 
         return ctx.stub.putState(__id, Buffer.from(stringify(sortKeysRecursive(updatedAnimalOwner))));
     }
->>>>>>> Stashed changes
 }

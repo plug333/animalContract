@@ -1,9 +1,5 @@
 /node_modules
-<<<<<<< Updated upstream
-/dist
-=======
 /dist
 /backend/node_modules/
 /backend/.env
 /backend/data
->>>>>>> Stashed changes
