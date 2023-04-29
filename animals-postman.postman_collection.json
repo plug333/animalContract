@@ -7,6 +7,34 @@
 	},
 	"item": [
 		{
+			"name": "Create animal",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"jjsd\",\n    \"breed\": \"dskmfkd\",\n    \"birthDate\": \"03/12/2000\",\n    \"imgUrl\": \"djnj\",\n    \"description\": \"asdjmksd\",\n    \"type\": \"CAT\",\n    \"pedigree\": false,\n    \"ownerId\": \"ksmdkdmsf\",\n    \"ownerName\": \"kdamskdmsa\",\n    \"ownerLastname\": \"peldsa\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3001/animal",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"animal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get all animal",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
@@ -59,64 +87,6 @@
 			"response": []
 		},
 		{
-			"name": "Create animal",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"jjsd\",\n    \"breed\": \"dskmfkd\",\n    \"birthDate\": \"03/12/2000\",\n    \"imgUrl\": \"djnj\",\n    \"description\": \"asdjmksd\",\n    \"type\": \"CAT\",\n    \"pedigree\": false,\n    \"ownerId\": \"ksmdkdmsf\",\n    \"ownerName\": \"kdamskdmsa\",\n    \"ownerLastname\": \"peldsa\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3001/animal",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3001",
-					"path": [
-						"animal"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update animal name",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"mxzmxmx\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3001/animal/2973e5cf-eb28-411b-8864-b3760d9431ed/name",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3001",
-					"path": [
-						"animal",
-						"2973e5cf-eb28-411b-8864-b3760d9431ed",
-						"name"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Get animal by name",
 			"request": {
 				"method": "GET",
@@ -159,12 +129,12 @@
 			"response": []
 		},
 		{
-			"name": "Transaction animal history",
+			"name": "Get animal history",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/animal/a571135e-51bd-4b34-9d33-0fd15ac28b90/history",
+					"raw": "http://localhost:3001/animal/a678d78b-beca-4983-ae3c-32d45a9d26ee/history",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -172,7 +142,7 @@
 					"port": "3001",
 					"path": [
 						"animal",
-						"a571135e-51bd-4b34-9d33-0fd15ac28b90",
+						"a678d78b-beca-4983-ae3c-32d45a9d26ee",
 						"history"
 					]
 				}
@@ -180,12 +150,21 @@
 			"response": []
 		},
 		{
-			"name": "Delete animal",
+			"name": "Update animal",
 			"request": {
-				"method": "DELETE",
+				"method": "PUT",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"update\",\n    \"breed\": \"update\",\n    \"birthDate\": \"03/12/2000\",\n    \"imgUrl\": \"update\",\n    \"description\": \"update\",\n    \"type\": \"DOG\",\n    \"pedigree\": false,\n    \"ownerId\": \"update\",\n    \"ownerName\": \"update\",\n    \"ownerLastname\": \"update\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:3001/animal/cd412b10-e410-4424-95ae-a798bab09d92",
+					"raw": "http://localhost:3001/animal/a678d78b-beca-4983-ae3c-32d45a9d26ee",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -193,7 +172,37 @@
 					"port": "3001",
 					"path": [
 						"animal",
-						"cd412b10-e410-4424-95ae-a798bab09d92"
+						"a678d78b-beca-4983-ae3c-32d45a9d26ee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update animal name",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"mxzmxmx\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3001/animal/2973e5cf-eb28-411b-8864-b3760d9431ed/name",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"animal",
+						"2973e5cf-eb28-411b-8864-b3760d9431ed",
+						"name"
 					]
 				}
 			},
@@ -224,6 +233,26 @@
 						"animal",
 						"30f234f2-8f1d-4584-8845-ee8970953fa9",
 						"ownerId"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete animal",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/animal/cd412b10-e410-4424-95ae-a798bab09d92",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"animal",
+						"cd412b10-e410-4424-95ae-a798bab09d92"
 					]
 				}
 			},

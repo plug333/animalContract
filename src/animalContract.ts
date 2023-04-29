@@ -147,10 +147,11 @@ export class AnimalContract extends Contract {
             throw new Error(`The animal ${__id} does not exist`);
         }
 
-        const updatedAnimalOwner = {
-            ownerId: _newOwnerId
-        }
+        const animal = await ctx.stub.getState(__id);
+        const newAnimalWithNewOwner = JSON.parse(animal.toString());
 
-        return ctx.stub.putState(__id, Buffer.from(stringify(sortKeysRecursive(updatedAnimalOwner))));
+        newAnimalWithNewOwner.ownerId = _newOwnerId;
+
+        await ctx.stub.putState(__id, Buffer.from(JSON.stringify(newAnimalWithNewOwner)));
     }
 }
